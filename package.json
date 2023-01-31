@@ -14,7 +14,7 @@
     "recycle",
     "dom"
   ],
-  "main": "dist/index.js",
+  "main": "src/index.js",
   "scripts": {
     "dev": "parcel dev/index.html -d .parcel",
     "dev:demo": "parcel demo/index.html -d .parcel",
