@@ -64,6 +64,9 @@ export default {
         scrollToBottomRange: {
             type: Number
         },
+        scrollTopThreshold: {
+          type: Number
+        },
         headerSlotHeight: {
             type: Number,
             default: 0
@@ -170,6 +173,8 @@ export default {
                 } else {
                     this.inRangeHit = false
                 }
+            } else if (this.scrollTopThreshold && target.scrollTop <= this.scrollTopThreshold) {
+                this.$emit("scrolled-to-top-threshold", target);
             }
         },
         onContainerResized () {
