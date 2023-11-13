@@ -181,6 +181,9 @@ exports.default = {
         scrollToBottomRange: {
             type: Number
         },
+        scrollTopThreshold: {
+            type: Number
+        },
         headerSlotHeight: {
             type: Number,
             default: 0
@@ -283,17 +286,40 @@ exports.default = {
             var target = event.target;
             var total = target.scrollHeight - target.offsetHeight;
             if (target.scrollTop === 0) {
+                // We have hit the top. Emit event and don't continue.
                 this.$emit("scrolled-to-top", target);
+                if (this.scrollTopThreshold) return;
             } else if (target.scrollTop === total) {
+                //     We have hit the bottom. Emit event and don't continue.
                 this.$emit("scrolled-to-bottom", target);
-            } else if (this.scrollToBottomRange) {
+                if (this.scrollToBottomRange) return;
+            }
+            if (this.scrollToBottomRange) {
+                // We want to scroll sooner than hitting the bottom
                 if (target.scrollTop < total && target.scrollTop > total - this.scrollToBottomRange) {
+                    // We are in the range
                     if (this.inRangeHit === false) {
+                        // If we didn't hit the range previously, emit event
                         this.inRangeHit = true;
                         this.$emit("scrolled-to-bottom-range", target);
                     }
                 } else {
+                    // Reset range hit
                     this.inRangeHit = false;
+                }
+            }
+            if (this.scrollTopThreshold) {
+                //   We want to scroll sooner than hitting the top
+                if (target.scrollTop <= this.scrollTopThreshold) {
+                    // We are in the range
+                    if (this.inRangeHit === false) {
+                        // If we didn't hit the range previously, emit event
+                        this.inRangeHit = true;
+                        this.$emit("scrolled-to-top-threshold", target);
+                    } else {
+                        // Reset range hit
+                        this.inRangeHit = false;
+                    }
                 }
             }
         },
