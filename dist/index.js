@@ -285,6 +285,7 @@ exports.default = {
             this.flushDisplayItems();
             var target = event.target;
             var total = target.scrollHeight - target.offsetHeight;
+            this.$emit("scroll", target);
             if (target.scrollTop === 0) {
                 // We have hit the top. Emit event and don't continue.
                 this.$emit("scrolled-to-top", target);
